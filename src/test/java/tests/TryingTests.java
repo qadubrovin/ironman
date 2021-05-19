@@ -1,11 +1,20 @@
 package tests;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class TryingTests {
+
+    @BeforeAll
+    static void setup() {
+        Configuration.startMaximized = true;
+    }
 
     @Test
     void fillStudentRegistrationForm() {
@@ -20,47 +29,38 @@ public class TryingTests {
         $x("//*[@id='lastName']").setValue("Stark");
 
         //fill email
-        Selenide.sleep(Long.parseLong("3000"));
+        $("#userEmail").setValue("TonyStark@gmail.com");
 
-        //check gender
+        //choose gender
+        $x("//*[@id='genterWrapper']//*[@for='gender-radio-3']").click();
 
         //fill mobile number
-
-        //choose birthdate
-
-        //fill subjects
-
-        //check hobbies
-
-        //select picture
+        $("#userNumber").setValue("8800555353");
 
         //fill address
+        $("#currentAddress").setValue("Pushkina street, Kolotushkina fleet");
 
-        //choose state
-
-        //choose city
+        //scroll into view submit button
+        $("#submit").scrollIntoView(true);
 
         //click submit
+        $("#submit").click();
+
+        //check successful popup header
+        $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
 
         //check submitting form name
+        $x("//*[contains(text(),'Student Name')]//..").shouldHave(text("Tony Stark"));
 
         //check submitting form email
-
-        //check submitting form gender
+        $x("//*[contains(text(),'Student Email')]//..").shouldHave(text("TonyStark@gmail.com"));
 
         //check submitting form mobile
-
-        //check submitting form birthdate
-
-        //check submitting form subjects
-
-        //check submitting form hobbies
+        $x("//*[@class='table-responsive']//td[contains(text(),'Mobile')]//..").shouldHave(text("8800555353"));
 
         //check submitting form address
+        $x("//*[@class='table-responsive']//td[contains(text(),'Address')]//..").shouldHave(text("Pushkina street, Kolotushkina fleet"));
 
-        //check submitting form state and city
-
-        //close submitting form
     }
 
 }
